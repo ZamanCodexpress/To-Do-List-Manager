@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modern To Do List Manager with analytics and productivity tracking">
+    <title>To Do List Manager</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <h1>To Do List Manager</h1>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-link active">Dashboard</a>
+                <a href="#" class="nav-link">Tasks</a>
+                <a href="#" class="nav-link">Analytics</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Left Column: Calendar & Daily Tasks -->
+        <aside class="left-column">
+            <!-- Calendar Section -->
+            <section class="card calendar-section">
+                <div class="calendar-header">
+                    <button class="calendar-nav-btn" id="prevMonth" aria-label="Previous month">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <h2 class="calendar-title" id="calendarTitle">January 2026</h2>
+                    <button class="calendar-nav-btn" id="nextMonth" aria-label="Next month">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="calendar-grid">
+                    <div class="calendar-weekdays">
+                        <span>Su</span>
+                        <span>Mo</span>
+                        <span>Tu</span>
+                        <span>We</span>
+                        <span>Th</span>
+                        <span>Fr</span>
+                        <span>Sa</span>
+                    </div>
+                    <div class="calendar-dates" id="calendarDates"></div>
+                </div>
+            </section>
+
+            <!-- Daily Repeated Tasks Section -->
+            <section class="card daily-tasks-section">
+                <div class="section-header">
+                    <h2>Daily Tasks</h2>
+                    <span class="daily-progress" id="dailyProgress">0/0</span>
+                </div>
+                
+                <!-- Add Daily Task Form -->
+                <form class="add-daily-task-form" id="addDailyTaskForm">
+                    <input 
+                        type="text" 
+                        id="dailyTaskInput" 
+                        class="daily-task-input" 
+                        placeholder="Add a daily task..." 
+                        maxlength="50"
+                    >
+                    <button type="submit" class="add-daily-btn" title="Add daily task">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+                
+                <div class="daily-tasks-list" id="dailyTasksList"></div>
+                
+                <p class="daily-task-hint">Add up to 5 tasks that repeat daily</p>
+            </section>
+        </aside>
+
+        <!-- Center Column: Main To Do Manager -->
+        <section class="center-column">
+            <div class="card todo-manager">
+                <h2 class="section-title">Task Manager</h2>
+                
+                <!-- Add Task Form -->
+                <form class="add-task-form" id="addTaskForm">
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            id="taskTitle" 
+                            class="input-field" 
+                            placeholder="Task title" 
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <textarea 
+                            id="taskDescription" 
+                            class="input-field textarea-field" 
+                            placeholder="Description (optional)" 
+                            rows="2"
+                        ></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskDueDate" class="form-label">Due Date (Optional)</label>
+                            <div class="date-input-wrapper">
+                                <svg class="date-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 2V5M16 2V5M3 9H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <input 
+                                    type="date" 
+                                    id="taskDueDate" 
+                                    class="input-field date-field"
+                                    placeholder="Select date"
+                                >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskPriority" class="form-label">Priority</label>
+                            <select id="taskPriority" class="input-field select-field">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Add Task
+                    </button>
+                </form>
+
+                <!-- Task Filters -->
+                <div class="task-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="active">Active</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+
+                <!-- Task List -->
+                <div class="tasks-list" id="tasksList"></div>
+            </div>
+        </section>
+
+        <!-- Right Column: Analytics Dashboard -->
+        <aside class="right-column">
+            <!-- Progress Analytics -->
+            <section class="card analytics-section">
+                <h2 class="section-title">Task Analytics</h2>
+                
+                <!-- Pie Chart -->
+                <div class="chart-container">
+                    <h3 class="chart-title">Completion Status</h3>
+                    <canvas id="pieChart"></canvas>
+                </div>
+
+                <!-- Bar Chart -->
+                <div class="chart-container">
+                    <h3 class="chart-title">Tasks Per Day</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <!-- Edit Task Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Task</h2>
+                <button class="modal-close" id="closeEditModal" aria-label="Close modal">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="editTaskForm">
+                <div class="form-group">
+                    <label for="editTaskTitle" class="form-label">Title</label>
+                    <input 
+                        type="text" 
+                        id="editTaskTitle" 
+                        class="input-field" 
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="editTaskDescription" class="form-label">Description</label>
+                    <textarea 
+                        id="editTaskDescription" 
+                        class="input-field textarea-field" 
+                        rows="3"
+                    ></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editTaskDueDate" class="form-label">Due Date (Optional)</label>
+                    <div class="date-input-wrapper">
+                        <svg class="date-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 2V5M16 2V5M3 9H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <input 
+                            type="date" 
+                            id="editTaskDueDate" 
+                            class="input-field date-field"
+                            placeholder="Select date"
+                        >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editTaskPriority" class="form-label">Priority</label>
+                    <select id="editTaskPriority" class="input-field select-field">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelEdit">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
