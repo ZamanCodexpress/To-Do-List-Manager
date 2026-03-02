@@ -125,9 +125,4 @@ This project is **open-source** and intended for **educational and portfolio use
 
 ## Author
 
-Built as a frontend practice project to demonstrate:
-
-* UI design
-* State management
-* Data visualization
-* Vanilla JavaScript skills
+Designed and developed by **Zaman Siraj**
